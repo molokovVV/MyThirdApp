@@ -23,34 +23,50 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        changeColorView.layer.cornerRadius = 15
         
-        redColorSlider.minimumValue = 0
-        redColorSlider.maximumValue = 1
         redColorSlider.tintColor = .red
-        
-        greenColorSlider.minimumValue = 0
-        greenColorSlider.maximumValue = 1
         greenColorSlider.tintColor = .green
         
-        blueColorSlider.minimumValue = 0
-        blueColorSlider.maximumValue = 1
-        blueColorSlider.tintColor = .blue
+        setColor()
+        setValue(for: saturationRedLabel, saturationGreenLabel, saturationBlueLabel)
         
     }
-    
-    func changeColor() {
-        changeColorView.backgroundColor = UIColor(red: CGFloat(redColorSlider.value), green: CGFloat(greenColorSlider.value), blue: CGFloat(blueColorSlider.value), alpha: 1)
-    }
 
-    @IBAction func colorSliderChange(_ sender: Any) {
-        changeColor()
+    // Change colors
+    @IBAction func colorSliderChange(_ sender: UISlider) {
+        switch sender.tag {
+        case 0: saturationRedLabel.text = string(from: sender)
+        case 1: saturationGreenLabel.text = string(from: sender)
+        case 2: saturationBlueLabel.text = string(from: sender)
+        default: break
+        }
+        
+        setColor()
     }
     
-    @IBAction func valueLabelChange(_ sender: Any) {
-        saturationRedLabel.text = String(redColorSlider.value)
-        saturationGreenLabel.text = String(greenColorSlider.value)
-        saturationBlueLabel.text = String(blueColorSlider.value)
+    private func setColor() {
+            changeColorView.backgroundColor = UIColor(
+                red: CGFloat(redColorSlider.value),
+                green: CGFloat(greenColorSlider.value),
+                blue: CGFloat(blueColorSlider.value),
+                alpha: 1
+            )
+        }
+    
+    private func setValue(for labels: UILabel...) {
+        labels.forEach { label in
+            switch label.tag {
+            case 0: saturationRedLabel.text = string(from: redColorSlider)
+            case 1: saturationGreenLabel.text = string(from: greenColorSlider)
+            case 2: saturationBlueLabel.text = string(from: blueColorSlider)
+            default: break
+            }
+        }
     }
     
+    private func string(from slider: UISlider) -> String {
+        String(format: "%.2f", slider.value)
+    }
 }
 
